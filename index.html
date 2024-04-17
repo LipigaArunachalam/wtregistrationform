@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-dark d-flex align-items-center justify-content-center" style="background-image: url('img.png'); height: 100vh;">
+
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="text-center text-white mb-4">Registration Form</h2>
+    <form id="registrationForm">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="Name" class="text-white h5">Name:</label>
+                <input type="text" class="form-control" id="Name" name="Name" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="email" class="text-white h5">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" disabled required>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="phone" class="text-white h5">Phone:</label>
+                <input type="tel" class="form-control" id="phone" name="phone" disabled required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="dob" class="text-white h5">Date of Birth:</label>
+                <input type="date" class="form-control" id="dob" name="dob" disabled required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="username" class="text-white h5">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" disabled required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password" class="text-white h5">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" disabled required>
+        </div>
+        
+        <button type="button" style="max-width: 120px;" class="btn btn-primary btn-block mx-auto" onclick="submitForm()">Submit</button>
+        <div id="printedValues" class="mt-3"></div>
+    </form>
+
+    <script>
+        document.getElementById('Name').addEventListener('input', function() {
+            document.getElementById('email').removeAttribute('disabled');
+        });
+
+        document.getElementById('email').addEventListener('input', function() {
+            document.getElementById('phone').removeAttribute('disabled');
+        });
+
+        document.getElementById('phone').addEventListener('input', function() {
+            document.getElementById('dob').removeAttribute('disabled');
+        });
+
+        document.getElementById('dob').addEventListener('input', function() {
+            document.getElementById('username').removeAttribute('disabled');
+        });
+
+        document.getElementById('username').addEventListener('input', function() {
+            document.getElementById('password').removeAttribute('disabled');
+        });
+
+        function submitForm() {
+            var Name = document.getElementById('Name').value;
+            var email = document.getElementById('email').value;
+            var phone = document.getElementById('phone').value;
+            var dob = document.getElementById('dob').value;
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            if (Name === '' || email === '' || phone === '' || dob === '' || username === '' || password === '') {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            if (!validatePhoneNumber(phone)) {
+                alert('Please enter a valid phone number.');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            if (phone.length !== 10) {
+                alert('Phone number must be 10 digits long.');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters long.');
+                return;
+            }
+
+            // Display entered content below the form
+            var printedValues = document.getElementById('printedValues');
+            printedValues.innerHTML = "<h3 class='text-white'>Entered Information:</h3>" +
+                                      "<p class='text-white'>Name: " + Name + "</p>" +
+                                      "<p class='text-white'>Email: " + email + "</p>" +
+                                      "<p class='text-white'>Phone: " + phone + "</p>" +
+                                      "<p class='text-white'>Date of Birth: " + dob + "</p>" +
+                                      "<p class='text-white'>Username: " + username + "</p>" +
+                                      "<p class='text-white'>Password: " + password + "</p>";
+        }
+
+        function validatePhoneNumber(phone) {
+            // Regular expression to validate phone numbers (supports formats like +1234567890, 123-456-7890, (123) 456-7890, etc.)
+            var phoneRegex = /^\+?[\d()-]+$/;
+            return phoneRegex.test(phone);
+        }
+
+        function validateEmail(email) {
+            // Regular expression to validate email addresses
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    </script>
+</div>
+
+</body>
+</html>
