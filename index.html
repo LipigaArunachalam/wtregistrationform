@@ -11,7 +11,7 @@
 
 <div class="container mt-5" style="max-width: 600px;">
     <h2 class="text-center text-white mb-4">Registration Form</h2>
-    <form id="registrationForm">
+    <form id="registrationForm" action="http://localhost:3999">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="Name" class="text-white h5">Name:</label>
@@ -20,6 +20,7 @@
             <div class="form-group col-md-6">
                 <label for="email" class="text-white h5">Email:</label>
                 <input type="email" class="form-control" id="email" name="email" disabled required>
+                <small id="emailMessage" class="form-text text-danger"></small>
             </div>
         </div>
         
@@ -27,6 +28,7 @@
             <div class="form-group col-md-6">
                 <label for="phone" class="text-white h5">Phone:</label>
                 <input type="tel" class="form-control" id="phone" name="phone" disabled required>
+                <small id="phoneMessage" class="form-text text-danger"></small>
             </div>
             <div class="form-group col-md-6">
                 <label for="dob" class="text-white h5">Date of Birth:</label>
@@ -54,11 +56,30 @@
         });
 
         document.getElementById('email').addEventListener('input', function() {
-            document.getElementById('phone').removeAttribute('disabled');
+            var email = document.getElementById('email').value;
+            var emailMessage = document.getElementById('emailMessage');
+            if (!validateEmail(email)) {
+                emailMessage.textContent = 'Please enter a valid email address.';
+                document.getElementById('phone').setAttribute('disabled', 'disabled');
+            } else {
+                emailMessage.textContent = '';
+                document.getElementById('phone').removeAttribute('disabled');
+            }
         });
 
         document.getElementById('phone').addEventListener('input', function() {
-            document.getElementById('dob').removeAttribute('disabled');
+            var phone = document.getElementById('phone').value;
+            var phoneMessage = document.getElementById('phoneMessage');
+            if (!validatePhoneNumber(phone)) {
+                phoneMessage.textContent = 'Please enter a valid phone number.';
+                document.getElementById('dob').setAttribute('disabled', 'disabled');
+            } else if (phone.length !== 10) {
+                phoneMessage.textContent = 'Phone number must be 10 digits long.';
+                document.getElementById('dob').setAttribute('disabled', 'disabled');
+            } else {
+                phoneMessage.textContent = '';
+                document.getElementById('dob').removeAttribute('disabled');
+            }
         });
 
         document.getElementById('dob').addEventListener('input', function() {
@@ -92,11 +113,6 @@
                 return;
             }
 
-            if (phone.length !== 10) {
-                alert('Phone number must be 10 digits long.');
-                return;
-            }
-
             if (password.length < 6) {
                 alert('Password must be at least 6 characters long.');
                 return;
@@ -114,8 +130,8 @@
         }
 
         function validatePhoneNumber(phone) {
-            // Regular expression to validate phone numbers (supports formats like +1234567890, 123-456-7890, (123) 456-7890, etc.)
-            var phoneRegex = /^\+?[\d()-]+$/;
+            // Regular expression to validate phone numbers (numeric and 10 digits long)
+            var phoneRegex = /^[0-9]{10}$/;
             return phoneRegex.test(phone);
         }
 
